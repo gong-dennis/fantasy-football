@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1564797747963.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4021703738",
+    "id" : "6605714C",
+    "lastKnownWriteTime" : 1564797763,
+    "last_content_update" : 1564797763388,
+    "path" : "~/Desktop/Fantasy Football/Analysis.R",
+    "project_path" : "Analysis.R",
+    "properties" : {
+        "cursorPosition" : "0,16",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

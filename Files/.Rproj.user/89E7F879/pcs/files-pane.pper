@@ -1,0 +1,9 @@
+{
+    "path" : "~/Desktop/Fantasy Football",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
