@@ -1,6 +1,6 @@
 library(tidyverse)
 
-files <- list.files(path="/Users/dennisgong/Desktop/Fantasy Football", 
+files <- list.files(path="Files", 
                     pattern="*.csv", full.names=TRUE, recursive=FALSE)
 
 teams <- files[grep("team", files)]
