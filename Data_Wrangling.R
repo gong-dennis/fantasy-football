@@ -2,6 +2,10 @@ library(tidyverse)
 library(ggplot2)
 library(broom)
 
+count_NA <- function(row_vec) {
+  sum(is.na(row_vec))
+}
+
 files <- list.files(path="Files", 
                     pattern="*.csv", full.names=TRUE, recursive=FALSE)
 
@@ -101,5 +105,8 @@ for (i in 1:length(AFC)) {
   full_team_tibbles[[i]] <- rbind(AFC[[i]], NFC[[i]])
 }
 
+#Add last years fantasy performance as a variable
+
+#Add 
 
 
