@@ -46,4 +46,4 @@ TE_predictions$VBD <- TE_predictions$PPR_Pts - TE_VBD_PPR
 
 top_150 <- rbind(QB_predictions, RB_predictions, WR_predictions, TE_predictions) %>% arrange(-VBD)
 
-
+write.table(top_150, file = "top-150")
