@@ -1,4 +1,6 @@
 library(tidyverse)
+library(ggplot2)
+library(broom)
 
 files <- list.files(path="Files", 
                     pattern="*.csv", full.names=TRUE, recursive=FALSE)
@@ -14,7 +16,8 @@ read_receiving <- function(file) {
   table <- read_csv(file)
   header <- scan(file, nlines = 1, what = character(), sep = ",")
   colnames(table) <- header
-  colnames(table)[1] <- substr(file, 44, nchar(file)-4)
+  colnames(table)[1] <- substr(file, 7, nchar(file)-4)
+  table <- table %>% filter(Rk != "Rk")
   table <- table[1:250,]
   table[,3] <- lapply(table[,3], gsub, pattern = "[*+]", replacement = "")
   table
@@ -26,8 +29,9 @@ read_rushing <- function(file) {
   header <- scan(file, nlines = 1, what = character(), sep = ",")
   header2 <- scan(file, skip = 1, nlines = 1, what = character(), sep = ",")
   colnames(table) <- paste(header, header2, sep = "_")
-  colnames(table)[1] <- substr(file, 44, nchar(file)-4)
+  colnames(table)[1] <- substr(file, 7, nchar(file)-4)
   colnames(table)[2:6] <- header2[2:6]
+  table <- table %>% filter(Rk != "Rk")
   table <- table[1:100,]
   table[,3] <- lapply(table[,3], gsub, pattern = "[*+]", replacement = "")
   table
@@ -38,7 +42,8 @@ read_passing <- function(file) {
   table <- read_csv(file)
   header <- scan(file, nlines = 1, what = character(), sep = ",")
   colnames(table) <- header
-  colnames(table)[1] <- substr(file, 44, nchar(file)-4)
+  colnames(table)[1] <- substr(file, 7, nchar(file)-4)
+  table <- table %>% filter(Rk != "Rk")
   table <- table[1:50,]
   table[,3] <- lapply(table[,3], gsub, pattern = "[*+]", replacement = "")
   table
@@ -51,8 +56,10 @@ read_fantasy <- function(file) {
   header2 <- scan(file, skip = 1, nlines = 1, what = character(), sep = ",")
   colnames(table) <- paste(header, header2, sep = "_")
   colnames(table)[2:6] <- header2[2:6]
-  colnames(table)[1] <- substr(file, 44, nchar(file)-4)
-  table <- table[1:300,]
+  colnames(table)[1] <- "Season"
+  table[,1] <- as.numeric(substr(file, 15, nchar(file)-4))
+  table <- table %>% filter(Rk != "Rk")
+  table <- table[1:150,]
   table[,3] <- lapply(table[,3], gsub, pattern = "[*+]", replacement = "")
   table
 }
@@ -62,9 +69,9 @@ read_team <- function(file) {
   the_table <- read_csv(file, skip = 1)
   header <- scan(file, nlines = 1, what = character(), sep = ",")
   colnames(the_table) <- header
-  colnames(the_table)[1] <- substr(file, 44, nchar(file)-4)
   the_table <- the_table[!grepl("FC", the_table$W),]
   the_table[,2] <- lapply(the_table[,2], gsub, pattern = "[*+]", replacement = "")
+  colnames(the_table)[1] <- substr(file, 7, nchar(file)-4)
   the_table
 }
 
@@ -83,17 +90,13 @@ is_AFC <- function(a_tibble) {
 }
 AFC <- team_tibbles[unlist(lapply(team_tibbles, is_AFC))]
 NFC <- team_tibbles[!unlist(lapply(team_tibbles, is_AFC))]
+colnames(AFC)[1] <- "Index"
 
-#Get unique variables names
-fantasy_names <- colnames(fantasy_tibbles[[1]])[2:length(colnames(fantasy_tibbles[[1]]))]
-rushing_names <- colnames(fantasy_tibbles[[1]])[2:length(colnames(fantasy_tibbles[[1]]))]
-fantasy_names <- colnames(fantasy_tibbles[[1]])[2:length(colnames(fantasy_tibbles[[1]]))]
-rushing_names <- colnames(fantasy_tibbles[[1]])[2:length(colnames(fantasy_tibbles[[1]]))]
-fantasy_names <- colnames(fantasy_tibbles[[1]])[2:length(colnames(fantasy_tibbles[[1]]))]
-
-all_names <- unique(c(fantasy_names, rushing_names, receiving_names, passing_names, team_names))
-
-
-
-
-
+full_team_tibbles <- list()
+for (i in 1:length(AFC)) {
+  colnames(AFC[[i]])[1] <- substr(colnames(AFC[[i]])[1], nchar(colnames(AFC[[i]])[1]) - 3, 
+                                  nchar(colnames(AFC[[i]])[1]))
+  colnames(NFC[[i]])[1] <- substr(colnames(NFC[[i]])[1], nchar(colnames(NFC[[i]])[1]) - 3, 
+                                  nchar(colnames(NFC[[i]])[1]))
+  full_team_tibbles[[i]] <- rbind(AFC[[i]], NFC[[i]])
+}
