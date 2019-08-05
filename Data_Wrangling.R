@@ -100,3 +100,6 @@ for (i in 1:length(AFC)) {
                                   nchar(colnames(NFC[[i]])[1]))
   full_team_tibbles[[i]] <- rbind(AFC[[i]], NFC[[i]])
 }
+
+
+
